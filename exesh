@@ -10,7 +10,7 @@ fi
 
 if [ "$1" == "-u" ] || [ "$1" == "--update" ]; then
   echo "Updating exesh..."
-  sudo curl -SL https://raw.githubusercontent.com/Raais/exesh/main/exesh -o /usr/local/bin/exesh
+  sudo curl -sSL https://raw.githubusercontent.com/Raais/exesh/main/exesh -o /usr/local/bin/exesh
   sudo chmod a+x /usr/local/bin/exesh
   echo "Done."
   exit 0
