@@ -5,15 +5,15 @@ nosave=false
 noconf=false
 
 if [ $# -eq 0 ]; then
-  echo "Usage: exesh [arglist: -nyu] FILE || \"URL\" [your args ...]"
+  echo "Usage: exesh [arglist: -nyU] FILE || \"URL\" [your args ...]"
   echo "Options:"
   echo "  -n: dont keep the downloaded file after execution"
   echo "  -y: execute from web without confirmation prompt"
-  echo "  -u: update exesh"
+  echo "  -U: update exesh"
   exit 1
 fi
 
-if [ "$1" == "-u" ]; then
+if [ "$1" == "-U" ]; then
   echo "Updating exesh..."
   curl -sSL https://raw.githubusercontent.com/Raais/ImStudio/main/LICENSE | cat
   read -p "Do you accept the terms of the license? (y/n): " -r
