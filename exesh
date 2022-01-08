@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Usage: exesh [options] FILE || "URL"
 if [ $# -eq 0 ]; then
   echo "Usage: exesh [options] FILE || \"URL\""
   echo "Options:"
