@@ -92,7 +92,7 @@ fi
 
 bash $FILE $EXARGS
 
-if [ $# -eq 2 ] && [[ "$isurl" = true ]]; then
+if [ $# -ge 2 ] && [[ "$isurl" = true ]]; then
   if [[ "$nosave" = true ]]; then
     rm $FILE
   fi
