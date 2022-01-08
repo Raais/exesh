@@ -14,6 +14,21 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
+if [ "$1" == "-u" ]; then
+  echo "Updating exesh..."
+  curl -sSL https://raw.githubusercontent.com/Raais/ImStudio/main/LICENSE | cat
+  read -p "Do you accept the terms of the license? (y/n): " -r
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Aborting..."
+    exit 1
+  fi
+  echo "Fetching from github..."
+  sudo curl -SL https://raw.githubusercontent.com/Raais/exesh/main/exesh -o /usr/local/bin/exesh
+  sudo chmod a+x /usr/local/bin/exesh
+  echo "Done."
+  exit 0
+fi
+
 if [ $# -ge 2 ]; then
   if [[ "$1" == *"n"* ]]; then
     nosave=true
@@ -21,18 +36,6 @@ if [ $# -ge 2 ]; then
   if [[ "$1" == *"y"* ]]; then
     noconf=true
   fi
-  if [[ "$1" == *"u"* ]]; then
-    update=true
-  fi
-fi
-
-if [[ "$update" = true ]]; then
-  echo "Updating exesh..."
-  echo "Fetching from github..."
-  sudo curl -SL https://raw.githubusercontent.com/Raais/exesh/main/exesh -o /usr/local/bin/exesh
-  sudo chmod a+x /usr/local/bin/exesh
-  echo "Done."
-  exit 0
 fi
 
 if [ $# -eq 1 ]; then
@@ -74,8 +77,8 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 if [[ "$noconf" = false ]] && [[ "$isurl" = true ]]; then
-  echo -e "${RED}Executing files from the web can be dangerous, are you sure you want to do this?${NC}"
-  read -p "'Y/y' to continue: " -r
+  echo -e "${RED}Executing files from the web can be dangerous${NC}"
+  read -p "Are you sure you want to do this? [y/n] " -r
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "Aborting..."
     rm $FILE
