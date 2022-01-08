@@ -66,7 +66,9 @@ fi
 
 if ! file $FILE | grep -Fiq 'shell'; then
     echo "Error: $FILE is not a valid shell script"
-    rm $FILE
+    if [[ "$isurl" = true ]]; then
+      rm $FILE
+    fi
     exit 1
 fi
 
