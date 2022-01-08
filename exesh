@@ -6,7 +6,7 @@ noconf=false
 update=false
 
 if [ $# -eq 0 ]; then
-  echo "Usage: exesh [arglist: -nsu] FILE || \"URL\""
+  echo "Usage: exesh [arglist: -nsu] FILE || \"URL\" [your args ...]"
   echo "Options:"
   echo "  -n: dont keep the downloaded file after execution"
   echo "  -y: execute from web without confirmation prompt"
