@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Usage: exesh [options] FILE || "URL"
+if [ $# -eq 0 ]; then
+  echo "Usage: exesh [options] FILE || \"URL\""
+  echo "Options:"
+  echo "  -n, --no-save: dont keep the downloaded file after execution"
+  exit 1
+fi
+
+if [ "$1" == "-u" ] || [ "$1" == "--update" ]; then
+  echo "Updating exesh..."
+  sudo curl -sSL https://github.com/Raais/exesh/blob/main/exesh -o /usr/local/bin/exesh
+  sudo chmod a+x /usr/local/bin/exesh
+  echo "Done."
+  exit 0
+  fi
+fi
+
+if [ $# -eq 1 ]; then
+  FILE=$1
+fi
+if [ $# -eq 2 ]; then
+  FILE=$2
+fi
+
+isurl=false
+URL=${FILE}
+
+if [[ $FILE == http* ]]; then
+  if ! curl --output /dev/null --silent --head --fail "$FILE"; then
+    echo "Error: $FILE is an invalid URL"
+    exit 1
+  fi
+  FILE=${FILE##*/}
+  FILE=${FILE%%\?*}
+  FILE=${FILE//\\/}
+  isurl=true
+  curl -sSL $URL -o $FILE
+fi
+
+if [[ ! -f $FILE ]] && [[ "$isurl" = true ]]; then
+  echo "File not found: $FILE"
+fi
+
+if ! file $FILE | grep -Fiq 'shell'; then
+    echo "Error: $FILE is not a valid shell script"
+    rm $FILE
+    exit 1
+fi
+
+if [ ! -x $FILE ]; then
+  chmod +x $FILE
+fi
+
+bash $FILE
+
+if [ $# -eq 2 ] && [[ "$isurl" = true ]]; then
+  if [[ $1 == "-n" || $1 == "--no-save" ]]; then
+    rm $FILE
+  fi
+fi
