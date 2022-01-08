@@ -16,7 +16,6 @@ if [ "$1" == "-u" ] || [ "$1" == "--update" ]; then
   sudo chmod a+x /usr/local/bin/exesh
   echo "Done."
   exit 0
-  fi
 fi
 
 if [ $# -eq 1 ]; then
