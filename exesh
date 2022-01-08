@@ -5,12 +5,14 @@
 isurl=false
 nosave=false
 noconf=false
+github=false
 
 if [ $# -eq 0 ]; then
-  echo "Usage: exesh [optlist: -nyU] FILE || \"URL\" [your args ...]"
+  echo "Usage: exesh [optlist: -nygU] FILE || \"URL\" [your args ...]"
   echo "Options:"
   echo "  -n: dont keep the downloaded file after execution"
   echo "  -y: execute from web without confirmation prompt"
+  echo "  -g: github/gist convert to raw"
   echo "  -U: update exesh"
   exit 1
 fi
@@ -37,6 +39,9 @@ if [ $# -ge 2 ]; then
   if [[ "$1" == *"y"* ]]; then
     noconf=true
   fi
+  if [[ "$1" == *"g"* ]]; then
+    github=true
+  fi
 fi
 
 if [ $# -eq 1 ]; then
@@ -47,6 +52,18 @@ if [ $# -ge 2 ]; then
 fi
 
 URL=${FILE}
+
+if [[ "$github" = true ]]; then
+  if ! echo "$URL" | grep -Fiq "githubusercontent"; then
+    if echo "$URL" | grep -Fiq "gist"; then
+        URL="${URL}/raw/"
+        URL=${URL/github/"githubusercontent"}
+    else
+        URL=${URL/blob\//}
+        URL=${URL/github/"raw.githubusercontent"}
+    fi
+  fi
+fi
 
 if [[ $FILE == http* ]]; then
   if ! curl --output /dev/null --silent --head --fail "$FILE"; then
