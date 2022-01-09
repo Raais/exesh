@@ -108,10 +108,10 @@ if [[ "$noconf" = false ]] && [[ "$isurl" = true ]]; then
 fi
 
 if [ $# -gt 2 ]; then
-  EXARGS=${@:3}
+  EXARGS="${@: 3}"
 fi
 
-bash "$FILE" "$EXARGS"
+bash "$FILE" $EXARGS
 
 if [ $# -ge 2 ] && [[ "$isurl" = true ]]; then
   if [[ "$nosave" = true ]]; then
