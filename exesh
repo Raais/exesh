@@ -19,7 +19,7 @@ fi
 
 if [ "$1" == "-U" ]; then
   echo "Updating exesh..."
-  curl -sSL https://raw.githubusercontent.com/Raais/ImStudio/main/LICENSE | cat
+  curl -sSL https://raw.githubusercontent.com/Raais/exesh/main/LICENSE | cat
   read -p "Do you accept the terms of the license? (y/n): " -r
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "Aborting..."
