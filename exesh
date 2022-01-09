@@ -3,22 +3,25 @@
 # Installation
 # sudo curl -sSL https://raw.githubusercontent.com/Raais/exesh/main/exesh -o /usr/local/bin/exesh && sudo chmod a+x /usr/local/bin/exesh
 
-isurl=false
+isaurl=false
 nosave=false
 noconf=false
 github=false
+noexec=false
+instll=false
 
 if [ $# -eq 0 ]; then
-  echo "Usage: exesh [optlist: -nygU] FILE || \"URL\" [your args ...]"
+  echo "Usage: exesh [optlist: -nygUI] FILE || \"URL\" [your args ...]"
   echo "Options:"
   echo "  -n: dont keep the downloaded file after execution"
   echo "  -y: execute from web without confirmation prompt"
   echo "  -g: github/gist convert to raw"
-  echo "  -U: update exesh"
+  echo "  -U: dont execute"
+  echo "  -I: install to /usr/local/bin"
   exit 1
 fi
 
-if [ "$1" == "-U" ]; then
+if [ "$1" == "--update" ]; then
   echo "Updating exesh..."
   curl -sSL https://raw.githubusercontent.com/Raais/exesh/main/LICENSE | cat
   read -p "Do you accept the terms of the license? (y/n): " -r
@@ -42,6 +45,12 @@ if [ $# -ge 2 ]; then
   fi
   if [[ "$1" == *"g"* ]]; then
     github=true
+  fi
+  if [[ "$1" == *"U"* ]]; then
+    noexec=true
+  fi
+  if [[ "$1" == *"I"* ]]; then
+    instll=true
   fi
 fi
 
@@ -67,24 +76,24 @@ if [[ "$github" = true ]]; then
 fi
 
 if [[ $FILE == http* ]]; then
-  if ! curl --output /dev/null --silent --head --fail "$FILE"; then
-    echo "Error: $FILE is an invalid URL"
+  if ! curl --output /dev/null --silent --head --fail "$URL"; then
+    echo "Error: $URL is an invalid URL"
     exit 1
   fi
   FILE=${FILE##*/}
   FILE=${FILE%%\?*}
   FILE=${FILE//\\/}
-  isurl=true
+  isaurl=true
   curl -sSL "$URL" -o "$FILE"
 fi
 
-if [[ ! -f $FILE ]] && [[ "$isurl" = true ]]; then
+if [[ ! -f $FILE ]] && [[ "$isaurl" = true ]]; then
   echo "File not found: $FILE"
 fi
 
 if ! file "$FILE" | grep -Fiq 'shell'; then
     echo "Error: $FILE is not a valid shell script"
-    if [[ "$isurl" = true ]]; then
+    if [[ "$isaurl" = true ]]; then
       rm "$FILE"
     fi
     exit 1
@@ -97,7 +106,7 @@ fi
 RED='\033[0;31m'
 NC='\033[0m'
 
-if [[ "$noconf" = false ]] && [[ "$isurl" = true ]]; then
+if [[ "$noconf" = false ]] && [[ "$isaurl" = true ]]; then
   echo -e "${RED}Executing files from the web can be dangerous${NC}"
   read -p "Are you sure you want to do this? [y/n] " -r
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -111,9 +120,17 @@ if [ $# -gt 2 ]; then
   EXARGS="${@: 3}"
 fi
 
-bash "$FILE" $EXARGS
+if [[ "$noexec" = false ]]; then
+  bash "$FILE" $EXARGS
+fi
 
-if [ $# -ge 2 ] && [[ "$isurl" = true ]]; then
+if [[ "$instll" = true ]]; then
+  echo "Installing to /usr/local/bin..."
+  sudo mv "$FILE" /usr/local/bin/
+  echo "Done."
+fi
+
+if [[ "$isaurl" = true ]] && [[ "$instll" = false ]]; then
   if [[ "$nosave" = true ]]; then
     rm "$FILE"
   fi
