@@ -87,7 +87,7 @@ if [[ $FILE == http* ]]; then
   curl -sSL "$URL" -o "$FILE"
 fi
 
-if [[ ! -f $FILE ]] && [[ "$isaurl" = true ]]; then
+if [[ ! -f $FILE ]] && [[ "$isaurl" = false ]]; then
   echo "File not found: $FILE"
 fi
 
