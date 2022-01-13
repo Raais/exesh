@@ -89,6 +89,7 @@ fi
 
 if [[ ! -f $FILE ]] && [[ "$isaurl" = false ]]; then
   echo "File not found: $FILE"
+  exit 1
 fi
 
 if ! file "$FILE" | grep -Fiq 'shell'; then
