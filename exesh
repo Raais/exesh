@@ -11,7 +11,7 @@ noexec=false
 instll=false
 
 if [ $# -eq 0 ]; then
-  echo "Usage: exesh [flaglist: -nygUI] FILE || \"URL\" [your args ...]"
+  echo "Usage: exesh [-nygUI] FILE || \"URL\" [your args ...]"
   echo "Options:"
   echo "  -n: dont keep the downloaded file after execution"
   echo "  -y: execute from web without confirmation prompt"
