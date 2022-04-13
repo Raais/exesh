@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#base32 16 char token
+token=$(head -c 500 /dev/urandom | tr -dc 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567' | fold -w 16 | head -n 1)
+time=$(date +"%T%p")
+
+echo "SETUP KEY/TOKEN: $token"
+curl qrcode.show -d "otpauth://totp/$time?secret=$token"
