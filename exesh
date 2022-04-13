@@ -9,6 +9,10 @@ noconf=false
 github=false
 noexec=false
 instll=false
+shrepo=false
+
+REPO="https://github.com/raais/exesh"
+BRANCH="get"
 
 if [ $# -eq 0 ]; then
   echo "Usage: exesh [-nygUI] FILE || \"URL\" [your args ...]"
@@ -23,14 +27,14 @@ fi
 
 if [ "$1" == "--update" ]; then
   echo "Updating exesh..."
-  curl -sSL https://raw.githubusercontent.com/Raais/exesh/main/LICENSE | cat
+  curl -sSL https://raw.githubusercontent.com/raais/exesh/main/LICENSE | cat
   read -p "Do you accept the terms of the license? (y/n): " -r
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "Aborting..."
     exit 1
   fi
   echo "Fetching from github..."
-  sudo curl -SL https://raw.githubusercontent.com/Raais/exesh/main/exesh -o /usr/local/bin/exesh
+  sudo curl -SL https://raw.githubusercontent.com/raais/exesh/main/exesh -o /usr/local/bin/exesh
   sudo chmod a+x /usr/local/bin/exesh
   echo "Done."
   exit 0
@@ -52,6 +56,12 @@ if [ $# -ge 2 ]; then
   if [[ "$1" == *"I"* ]]; then
     instll=true
   fi
+  if [[ "$1" == *"R"* ]]; then
+    shrepo=true
+    nosave=true
+    noconf=true
+    github=true
+  fi
 fi
 
 if [ $# -eq 1 ]; then
@@ -59,6 +69,10 @@ if [ $# -eq 1 ]; then
 fi
 if [ $# -ge 2 ]; then
   FILE=$2
+fi
+
+if [[ "$shrepo" = true ]]; then
+  FILE="${REPO}/blob/${BRANCH}/${FILE}"
 fi
 
 URL=${FILE}
