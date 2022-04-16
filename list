@@ -1,0 +1,8 @@
+#!/bin/bash
+
+REPO="raais/exesh"
+BRANCH="get"
+
+URL="https://api.github.com/repos/$REPO/git/trees/$BRANCH"
+
+curl -s $URL | jq -r '.tree[] | .path'
